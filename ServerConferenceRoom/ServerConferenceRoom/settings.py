@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "ConferenceApp",
 ]
 
 MIDDLEWARE = [
@@ -75,8 +76,10 @@ WSGI_APPLICATION = "ServerConferenceRoom.wsgi.application"
 
 DATABASES = {
     "default": {
+        "USER": "postgres",
+        "PASSWORD": "coderslab",
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": "ConferenceRooms"
     }
 }
 
