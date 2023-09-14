@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Conference room form</title>
+</head>
+<body>
+    <!-- Nav -->
+    <h2>Conference Rooms Navigation Menu</h2>
+    <nav>
+        <a href="">Show all conference rooms</a>
+        <a href="/room/new/">Add new conference room</a>
+    </nav>
+    <!-- Nav -->
+    <div>
+    <h1>Fill the form to create new Conference Room</h1>
+        <form class=„form" method="post" action="">
+            <label for="room_name">Name of conference room</label><br>
+            <input name="room_name" type="text" maxlength="255" value=""/><br><br>
+
+            <label for="room_capacity">Maximum capacity of room</label><br>
+            <input type="number" name="room_capacity" min="1" max="5000"/><br><br>
+
+            <label for="projector_available">Projector available</label><br>
+            <input type="checkbox" id="projector_available" name="projector_available" value="True"><br><br>
+
+            <button type="submit" name="submit" value="movie">Submit</button><br><br>
+        </form>
+    </div>
+    <!-- Footer -->
+    <footer>
+        <p>Author: Jakub Mierzyński</p>
+        <p><a href="mailto:jakub.mierzynski@gmail.com">jakub.mierzynski@gmail.com</a></p>
+    </footer>
+    <!-- Footer -->
+
+</body>
+</html>

@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from ConferenceApp.views import AddNewConferenceRoom
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("room/new/", AddNewConferenceRoom.as_view()),
 ]
