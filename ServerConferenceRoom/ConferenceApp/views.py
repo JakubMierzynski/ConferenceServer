@@ -53,6 +53,64 @@ class AddNewConferenceRoom(View):
         return HttpResponseRedirect("http://127.0.0.1:8000/")
 
 
+@method_decorator(csrf_exempt, name="dispatch" )
+class AllAvailableRooms(View):
+    def get(self, request):
+        all_rooms = ConferenceRoomModel.objects.all()
+
+        table = HttpResponse("""
+                <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title>All conference rooms</title>
+        </head>
+        <body>
+                    <!-- Nav -->
+            <h1>Conference Rooms Navigation Menu</h1>
+            <nav>
+                <a href="http://127.0.0.1:8000/all_rooms/">Show all conference rooms</a>
+                <a href="/room/new/">Add new conference room</a>
+            </nav>
+            <!-- Nav -->
+            <!-- Table -->
+            <table border=solid black 1px>
+                <tr>
+                    <th>Name of room</th>
+                    <th>Capacity</th>
+                    <th>Available</th>
+                    <th>Edit room</th>
+                    <th>Delete room</th>
+                    <th>Reserve room</th>
+                </tr>
+        """)
+
+        for room in all_rooms:
+            table.write(f"""
+            <tr>
+                <td><a href="http://127.0.0.1:8000/room/{room.pk}">{room.room_name}</a></td>
+                <td>{room.room_capacity}</td>
+                <td>{room.room_available}</td>
+                <td><a href="http://127.0.0.1:8000/modify/{room.pk}">PRESS TO EDIT ROOM</a></td>
+                <td><a href="http://127.0.0.1:8000/delete/{room.pk}">PRESS TO DELETE ROOM</a></td>
+                <td><a href="http://127.0.0.1:8000/reserve/{room.pk}">PRESS TO RESERVE ROOM</a></td>
+            </tr>
+            """)
+
+        table.write("""
+            </table>
+            <footer>
+                <p>Author: Jakub Mierzyński</p>
+                <p><a href="mailto:jakub.mierzynski@gmail.com">jakub.mierzynski@gmail.com</a></p>
+            </footer>
+            <!-- Table -->
+            <!-- Footer -->
+        </body>
+        </html>
+        """)
+
+        return table
+
 
 
 
