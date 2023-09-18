@@ -152,6 +152,60 @@ class DeleteRoom(View):
         return HttpResponseRedirect("http://127.0.0.1:8000/all_rooms/")
 
 
+@method_decorator(csrf_exempt, name="dispatch")
+class ModifyRoom(View):
+    def get(self, request, room_id):
+        # Creating template form html form.
+        room = ConferenceRoomModel.objects.get(pk=int(room_id))
+
+        temp = {
+            "room_name": room.room_name,
+            "room_capacity": room.room_capacity,
+            "room_id": int(room_id),
+            "projector_available": room.projector_available
+        }
+
+        return render(request, "edit_room.html", temp)
+
+    def post(self, request, room_id):
+        all_rooms = ConferenceRoomModel.objects.all()
+        new_capacity = request.POST.get("capacity")
+        new_name = request.POST.get("room_name")
+        is_projector_available = True if request.POST.get("projector_available") == "True" else False
+        room_id = request.POST.get("room_id")
+
+        # Validation of capacity value
+        if len(new_capacity) == 0:
+            return HttpResponse("Please fill capacity")
+        try:
+            new_capacity = int(new_capacity)
+        except ValueError:
+            return HttpResponse("Capacity cannot be other than number")
+
+
+        # Validation of new name. We are allowing to change only capacity or all specifications
+        if len(new_name) == 0:
+            return HttpResponse("Please fill room name")
+        for room in all_rooms:
+            if room.room_name == new_name:
+                if int(room.pk) == int(room_id):
+                    pass
+                else:
+                    return HttpResponse("Room name is already occupied. Try other one")
+
+        # Editing and saving changes in conference room
+        edited_room = ConferenceRoomModel.objects.get(pk=room_id)
+        edited_room.room_name = new_name
+        edited_room.room_capacity = new_capacity
+        edited_room.projector_available = is_projector_available
+        edited_room.save()
+
+        return HttpResponseRedirect("http://127.0.0.1:8000/all_rooms/")
+
+
+
+
+
 
 
 

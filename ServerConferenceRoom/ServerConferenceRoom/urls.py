@@ -16,11 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
-from ConferenceApp.views import AddNewConferenceRoom, AllAvailableRooms, DeleteRoom
+from ConferenceApp.views import AddNewConferenceRoom, AllAvailableRooms, DeleteRoom, ModifyRoom
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("room/new/", AddNewConferenceRoom.as_view()),
     path("all_rooms/", AllAvailableRooms.as_view()),
     re_path(r"^delete/(?P<room_id>\d+)/$", DeleteRoom.as_view()),
+    re_path(r"^modify/(?P<room_id>\d+)/$", ModifyRoom.as_view()),
 ]

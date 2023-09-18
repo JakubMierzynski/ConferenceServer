@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Conference Rooms</title>
+</head>
+<body>
+    <!-- Nav -->
+    <h1>Conference Rooms Navigation Menu</h1>
+    <nav>
+        <a href="http://127.0.0.1:8000/all_rooms/">Show all conference rooms</a>
+        <a href="/room/new/">Add new conference room</a>
+    </nav>
+    <!-- Nav -->
+    <!-- form -->
+    <form action="" method="POST">
+        <label for="room_name">Room name:</label><br>
+        <input type="text" name="room_name" id="room_name" value={{ room_name }}><br>
+
+        <label for="capacity">Capacity:</label><br>
+        <input type="number" name="capacity" id="capacity" min="0" step="1" value={{ room_capacity }}><br>
+
+        <label form="room_id"></label>
+        <input type="hidden" name="room_id" id="room_id" value={{ room_id }}>
+
+        <label for="projector_available">Projector available</label><br>
+        <input type="checkbox" id="projector_available" name="projector_available" value="False"><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+    <!-- form -->
+    <!-- Footer -->
+    <footer>
+        <p>Author: Jakub Mierzyński</p>
+        <p><a href="mailto:jakub.mierzynski@gmail.com">jakub.mierzynski@gmail.com</a></p>
+    </footer>
+    <!-- Footer -->
+
+</body>
+</html>
