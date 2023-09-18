@@ -11,20 +11,6 @@ from ConferenceApp.models import ConferenceRoomModel
 @method_decorator(csrf_exempt, name="dispatch")
 class AddNewConferenceRoom(View):
     def get(self, request):
-        # if method is get, return form for new conference room
-        # form = HttpResponse("""
-        # <form action="" method="POST">
-        #     <label for="room_name">Room name:</label><br>
-        #     <input type="text" name="room_name" id="room_name"><br>
-        #     <label for="room_capacity">Room capacity:</label><br>
-        #     <input type="number" name="room_capacity" id="room_capacity" min=1><br>
-        #     <label for="projector_available">Projector available</label><br>
-        #     <input type="checkbox" id="projector_available" name="projector_available" value="True"><br><br>
-        #     <input type="submit" value="Submit">
-        # </form>
-        # """)
-        #
-        # return form
         return TemplateResponse(request, "adding_room_form.html")
 
     def post(self, request):
