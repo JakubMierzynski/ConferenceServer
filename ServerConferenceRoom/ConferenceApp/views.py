@@ -50,13 +50,41 @@ class AddNewConferenceRoom(View):
 
         new_conference_room.save()
 
-        return HttpResponseRedirect("http://127.0.0.1:8000/")
+        return HttpResponseRedirect("http://127.0.0.1:8000/all_rooms/")
 
 
 @method_decorator(csrf_exempt, name="dispatch" )
 class AllAvailableRooms(View):
     def get(self, request):
         all_rooms = ConferenceRoomModel.objects.all()
+
+        if len(all_rooms) == 0:
+            return HttpResponse("""
+            <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Conference Rooms</title>
+                </head>
+                <body>
+                    <!-- Nav -->
+                    <h1>Conference Rooms Navigation Menu</h1>
+                    <nav>
+                        <a href="http://127.0.0.1:8000/all_rooms/">Show all conference rooms</a>
+                        <a href="/room/new/">Add new conference room</a>
+                    </nav>
+                    <!-- Nav -->
+                        <h2>There are no conference rooms yet</h2>
+                    <!-- Footer -->
+                    <footer>
+                        <p>Author: Jakub Mierzyński</p>
+                        <p><a href="mailto:jakub.mierzynski@gmail.com">jakub.mierzynski@gmail.com</a></p>
+                    </footer>
+                    <!-- Footer -->
+                
+                </body>
+                </html>
+            """)
 
         table = HttpResponse("""
                 <!DOCTYPE html>
@@ -79,6 +107,7 @@ class AllAvailableRooms(View):
                     <th>Name of room</th>
                     <th>Capacity</th>
                     <th>Available</th>
+                    <th>Projector available</th>
                     <th>Edit room</th>
                     <th>Delete room</th>
                     <th>Reserve room</th>
@@ -91,6 +120,7 @@ class AllAvailableRooms(View):
                 <td><a href="http://127.0.0.1:8000/room/{room.pk}">{room.room_name}</a></td>
                 <td>{room.room_capacity}</td>
                 <td>{room.room_available}</td>
+                <td>{room.projector_available}</td>
                 <td><a href="http://127.0.0.1:8000/modify/{room.pk}">PRESS TO EDIT ROOM</a></td>
                 <td><a href="http://127.0.0.1:8000/delete/{room.pk}">PRESS TO DELETE ROOM</a></td>
                 <td><a href="http://127.0.0.1:8000/reserve/{room.pk}">PRESS TO RESERVE ROOM</a></td>
@@ -110,6 +140,19 @@ class AllAvailableRooms(View):
         """)
 
         return table
+
+
+@method_decorator(csrf_exempt, name="dispatch")
+class DeleteRoom(View):
+    def get(self, request, room_id):
+        room_id = int(room_id)
+
+        ConferenceRoomModel.objects.filter(pk=room_id).delete()
+
+        return HttpResponseRedirect("http://127.0.0.1:8000/all_rooms/")
+
+
+
 
 
 
