@@ -112,6 +112,7 @@ class AllAvailableRooms(View):
                     <th>Edit room</th>
                     <th>Delete room</th>
                     <th>Reserve room</th>
+                    <th>Show room specifications</th>
                 </tr>
         """)
 
@@ -125,6 +126,7 @@ class AllAvailableRooms(View):
                 <td><a href="http://127.0.0.1:8000/modify/{room.pk}">PRESS TO EDIT ROOM</a></td>
                 <td><a href="http://127.0.0.1:8000/delete/{room.pk}">PRESS TO DELETE ROOM</a></td>
                 <td><a href="http://127.0.0.1:8000/reserve/{room.pk}">PRESS TO RESERVE ROOM</a></td>
+                <td><a href="http://127.0.0.1:8000/show-specification/{room.pk}">PRESS TO SHOW ALL DETAILS</a></td>
             </tr>
             """)
 
@@ -217,9 +219,15 @@ class ReserveRoomClass(View):
         comment = request.POST.get("comment")
 
         splitted_reservation_date = reservation_date.split("-")
-        date_to_check = datetime.date(int(splitted_reservation_date[0]),
-                                      int(splitted_reservation_date[1]),
-                                      int(splitted_reservation_date[2]))
+
+        try:
+            date_to_check = datetime.date(int(splitted_reservation_date[0]),
+                                          int(splitted_reservation_date[1]),
+                                          int(splitted_reservation_date[2]))
+        except ValueError:
+            return render(request,
+                          "reserve_room.html",
+                          context={"room": room, "error": "Fill reservation date"})
 
         # Check if room isn't already booked for that day
         if RoomReservation.objects.filter(date=reservation_date, room=room):
@@ -237,26 +245,15 @@ class ReserveRoomClass(View):
         RoomReservation.objects.create(date=reservation_date, room=room, comment=comment)
         return HttpResponseRedirect("http://127.0.0.1:8000/all_rooms")
 
-        # reservation_date = request.POST.get("date")
-        # room_id = int(room_id)
-        # # Creating datetime from reservation date to compare later with today's date
-        # split_reservation_date = reservation_date.split("-")
-        # date_to_check = datetime.date(int(split_reservation_date[0]),
-        #                               int(split_reservation_date[1]),
-        #                               int(split_reservation_date[2]))
-        #
-        # room_id = request.POST.get("room_id")
-        #
-        # if date_to_check < datetime.date.today():
-        #     return HttpResponse("Room cannot be reserved for a day from past")
-        #
-        # all_reservations = RoomReservation.objects.all()
-        #
-        # for reservation in all_reservations:
-        #     if reservation.room_id.pk == room_id and reservation.date == date_to_check:
-        #         return HttpResponse()
-        #
-        # return HttpResponse("TEST")
+
+@method_decorator(csrf_exempt, name="dispatch")
+class ShowSpecification(View):
+    def get(self, request, room_id):
+        room = ConferenceRoomModel.objects.get(pk=room_id)
+        reservations = room.roomreservation_set.filter(date__gte=(datetime.date.today())).order_by("date")
+
+        return render(request, "room_specification.html", context={"room": room, "reservations": reservations})
+
 
 
 

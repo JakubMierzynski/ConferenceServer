@@ -12,7 +12,24 @@
         <a href="/room/new/">Add new conference room</a>
     </nav>
     <!-- Nav -->
-
+    <!-- Room Specs -->
+        <h1>{{ room.room_name }} specifications:</h1>
+        <p>Capacity: {{ room.room_capacity }}</p>
+        <p>Projector available: {{ room.projector_available }}</p>
+        <p>
+            <a href="/modify/{{ room.pk }}">PRESS TO EDIT ROOM</a><br><br>
+            <a href="/delete/{{ room.pk }}">PRESS TO DELETE ROOM</a><br><br>
+            <a href="/reserve/{{ room.pk }}">PRESS TO RESERVE ROOM</a><br><br></p>
+        <p><h1>Reservations</h1></p>
+        <ul class="list-group">
+            {% for reservation in reservations %}
+            <li class="list-group-item">
+                <h3>Date: {{ reservation.date }}</h3>
+                <p>Comment to reservation: {{ reservation.comment }}</p>
+            </li>
+            {% endfor %}
+        </ul><br>
+    <!-- Room Specs -->
 
     <!-- Footer -->
     <footer>
