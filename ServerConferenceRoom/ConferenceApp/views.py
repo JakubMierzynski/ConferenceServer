@@ -135,7 +135,7 @@ class ModifyRoom(View):
 class ReserveRoomClass(View):
     def get(self, request, room_id):
         room = ConferenceRoomModel.objects.get(pk=int(room_id))
-        this_room_reservations = [reservation for reservation in room.roomreservation_set.all()]
+        this_room_reservations = [reservation for reservation in room.roomreservation_set.all().order_by("date")]
         return render(request, "reserve_room.html", context={"room": room,
                                                              "this_room_reservations": this_room_reservations})
 
