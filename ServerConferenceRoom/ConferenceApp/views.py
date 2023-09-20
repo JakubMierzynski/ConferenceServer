@@ -135,7 +135,9 @@ class ModifyRoom(View):
 class ReserveRoomClass(View):
     def get(self, request, room_id):
         room = ConferenceRoomModel.objects.get(pk=int(room_id))
-        return render(request, "reserve_room.html", context={"room": room})
+        this_room_reservations = [reservation for reservation in room.roomreservation_set.all()]
+        return render(request, "reserve_room.html", context={"room": room,
+                                                             "this_room_reservations": this_room_reservations})
 
     def post(self, request, room_id):
         room = ConferenceRoomModel.objects.get(pk=int(room_id))
@@ -143,6 +145,7 @@ class ReserveRoomClass(View):
         comment = request.POST.get("comment")
 
         splitted_reservation_date = reservation_date.split("-")
+        all_reservations = RoomReservation.objects.all()
 
         try:
             date_to_check = datetime.date(int(splitted_reservation_date[0]),
@@ -152,6 +155,7 @@ class ReserveRoomClass(View):
             return render(request,
                           "reserve_room.html",
                           context={"room": room, "error": "Fill reservation date"})
+
 
         # Check if room isn't already booked for that day
         if RoomReservation.objects.filter(date=reservation_date, room=room):

@@ -32,17 +32,7 @@
         </form>
       </div>
     </div>
-{#    <h1>Fill the form to reserve room {{ room.room_name }}</h1>#}
-{#        <form class=„form" method="post" action="">#}
-{#            <label for="date">Date</label><br>#}
-{#            <input name="date" type="date" value="" min="2023-09-11"/><br><br>#}
-{##}
-{#            <label for="comment">Comment</label><br>#}
-{#            <input name="comment" type="text" value="" maxlength="500">#}
-{##}
-{#            <button type="submit" name="submit" value="movie">Submit</button><br><br>#}
-{#        </form>#}
-    <!-- Form -->
+        <!-- Form -->
         {% if error %}
         <!-- Form error -->
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -53,6 +43,16 @@
         </div>
         <!-- Form error -->
         {% endif %}
+    <!-- All reservations -->
+    <div>
+        <p><h2>Current room reservations:</h2></p>
+        <ul>
+        {% for reservation in this_room_reservations %}
+            <li>{{ reservation.date }} - {{ reservation.comment }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+    <!-- All reservations -->
     <!-- Footer -->
 
     <footer>
