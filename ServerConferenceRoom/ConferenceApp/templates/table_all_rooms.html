@@ -5,15 +5,58 @@
     <title>All conference rooms</title>
 </head>
 <body>
-    <table>
+    <!-- Nav -->
+    <h1>Conference Rooms Navigation Menu</h1>
+    <nav>
+        <a href="http://127.0.0.1:8000/all_rooms/">Show all conference rooms</a>
+        <a href="/room/new/">Add new conference room</a>
+    </nav><br>
+    <!-- Nav -->
+    <!-- All rooms table -->
+    <table border="1px black solid">
         <tr>
             <th>Name of room</th>
             <th>Capacity</th>
-            <th>Available</th>
+{#            <th>Available</th>#}
+            <th>Room available today</th>
+            <th>Room details</th>
             <th>Edit room</th>
             <th>Delete room</th>
             <th>Book room</th>
         </tr>
+        {% for room in all_rooms %}
+        <tr>
+            <td>{{ room.room_name }}</td>
+            <td>{{ room.room_capacity }}</td>
+{#            <td>{{ room.room_available }}</td>#}
+            {% if room.reserved %}
+                <td>RESERVED</td>
+            {% else %}
+                <td>AVAILABLE</td>
+            {% endif %}
+            <td><a href="http://127.0.0.1:8000/show-specification/{{ room.pk }}">PRESS TO EDIT ROOM</a></td>
+            <td><a href="http://127.0.0.1:8000/modify/{{ room.pk }}">PRESS TO EDIT ROOM</a></td>
+            <td><a href="http://127.0.0.1:8000/delete/{{ room.pk }}">PRESS TO DELETE ROOM</a></td>
+            <td><a href="http://127.0.0.1:8000/reserve/{{ room.pk }}">PRESS TO RESERVE ROOM</a></td>
+        </tr>
+        {% endfor %}
     </table>
+    <!-- ALL rooms table -->
+    {% if error %}
+        <!-- Form error -->
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          {{error}}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <!-- Form error -->
+        {% endif %}
+    <!-- Footer -->
+    <footer>
+        <p>Author: Jakub Mierzyński</p>
+        <p><a href="mailto:jakub.mierzynski@gmail.com">jakub.mierzynski@gmail.com</a></p>
+    </footer>
+    <!-- Footer -->
 </body>
 </html>

@@ -60,89 +60,13 @@ class AllAvailableRooms(View):
         all_rooms = ConferenceRoomModel.objects.all()
 
         if len(all_rooms) == 0:
-            return HttpResponse("""
-            <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <title>Conference Rooms</title>
-                </head>
-                <body>
-                    <!-- Nav -->
-                    <h1>Conference Rooms Navigation Menu</h1>
-                    <nav>
-                        <a href="http://127.0.0.1:8000/all_rooms/">Show all conference rooms</a>
-                        <a href="/room/new/">Add new conference room</a>
-                    </nav>
-                    <!-- Nav -->
-                        <h2>There are no conference rooms yet</h2>
-                    <!-- Footer -->
-                    <footer>
-                        <p>Author: Jakub Mierzyński</p>
-                        <p><a href="mailto:jakub.mierzynski@gmail.com">jakub.mierzynski@gmail.com</a></p>
-                    </footer>
-                    <!-- Footer -->
-                
-                </body>
-                </html>
-            """)
-
-        table = HttpResponse("""
-                <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <title>All conference rooms</title>
-        </head>
-        <body>
-                    <!-- Nav -->
-            <h1>Conference Rooms Navigation Menu</h1>
-            <nav>
-                <a href="http://127.0.0.1:8000/all_rooms/">Show all conference rooms</a><br>
-                <a href="/room/new/">Add new conference room</a><br><br>
-            </nav>
-            <!-- Nav -->
-            <!-- Table -->
-            <table border=solid black 1px>
-                <tr>
-                    <th>Name of room</th>
-                    <th>Capacity</th>
-                    <th>Available</th>
-                    <th>Projector available</th>
-                    <th>Edit room</th>
-                    <th>Delete room</th>
-                    <th>Reserve room</th>
-                    <th>Show room specifications</th>
-                </tr>
-        """)
+            return render(request, "table_all_rooms.html", context={"error": "No rooms available"})
 
         for room in all_rooms:
-            table.write(f"""
-            <tr>
-                <td><a href="http://127.0.0.1:8000/room/{room.pk}">{room.room_name}</a></td>
-                <td>{room.room_capacity}</td>
-                <td>{room.room_available}</td>
-                <td>{room.projector_available}</td>
-                <td><a href="http://127.0.0.1:8000/modify/{room.pk}">PRESS TO EDIT ROOM</a></td>
-                <td><a href="http://127.0.0.1:8000/delete/{room.pk}">PRESS TO DELETE ROOM</a></td>
-                <td><a href="http://127.0.0.1:8000/reserve/{room.pk}">PRESS TO RESERVE ROOM</a></td>
-                <td><a href="http://127.0.0.1:8000/show-specification/{room.pk}">PRESS TO SHOW ALL DETAILS</a></td>
-            </tr>
-            """)
+            reservation_dates = [reservation.date for reservation in room.roomreservation_set.all()]
+            room.reserved = datetime.date.today() in reservation_dates
 
-        table.write("""
-            </table>
-            <footer>
-                <p>Author: Jakub Mierzyński</p>
-                <p><a href="mailto:jakub.mierzynski@gmail.com">jakub.mierzynski@gmail.com</a></p>
-            </footer>
-            <!-- Table -->
-            <!-- Footer -->
-        </body>
-        </html>
-        """)
-
-        return table
+        return render(request, "table_all_rooms.html", context={"all_rooms": all_rooms})
 
 
 @method_decorator(csrf_exempt, name="dispatch")
