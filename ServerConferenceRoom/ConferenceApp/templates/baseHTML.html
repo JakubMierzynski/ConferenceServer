@@ -10,9 +10,24 @@
     <nav>
         <a href="http://127.0.0.1:8000/all_rooms/">Show all conference rooms</a>
         <a href="/room/new/">Add new conference room</a>
+        <a href="http://127.0.0.1:8000">Search for a room</a>
     </nav>
     <!-- Nav -->
+    <!-- Searching tool -->
+    <h2>Find conference room</h2>
+    <form action="http://127.0.0.1:8000/search-room" method="GET">
+        <label for="room_name">Conference room name:</label><br>
+        <input type="text" name="room_name" id="room_name"><br>
 
+        <label for="room_capacity">Room Capacity:</label><br>
+        <input type="number" name="room_capacity" id="room_capacity", min="0"><br>
+
+        <label for="projector_available">Projector available</label><br>
+        <input type="checkbox" id="projector_available" name="projector_available" value="True"><br><br>
+
+        <button type="submit" name="submit" value="search">Search</button><br><br>
+    </form>
+    <!-- Searching tool -->
 
     <!-- Footer -->
     <footer>

@@ -18,18 +18,16 @@
         <tr>
             <th>Name of room</th>
             <th>Capacity</th>
-{#            <th>Available</th>#}
             <th>Room available today</th>
             <th>Room details</th>
             <th>Edit room</th>
             <th>Delete room</th>
             <th>Book room</th>
         </tr>
-        {% for room in all_rooms %}
+        {% for room in rooms %}
         <tr>
-            <td>{{ room.room_name }}</td>
+            <td>{{ room.room_name}}</td>
             <td>{{ room.room_capacity }}</td>
-{#            <td>{{ room.room_available }}</td>#}
             {% if room.reserved %}
                 <td>RESERVED</td>
             {% else %}

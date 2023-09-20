@@ -10,6 +10,12 @@ import datetime
 
 # Create your views here.
 @method_decorator(csrf_exempt, name="dispatch")
+class MainPage(View):
+    def get(self, request):
+        return render(request, "baseHTML.html")
+
+
+@method_decorator(csrf_exempt, name="dispatch")
 class AddNewConferenceRoom(View):
     def get(self, request):
         return TemplateResponse(request, "adding_room_form.html")
@@ -182,6 +188,33 @@ class ShowSpecification(View):
 
         return render(request, "room_specification.html", context={"room": room, "reservations": reservations})
 
+
+@method_decorator(csrf_exempt, name="dispatch")
+class SearchRoom(View):
+    def get(self, request):
+        searched_room_name = request.GET.get("room_name")
+        searched_room_capacity = request.GET.get("room_capacity")
+        searched_room_capacity = int(searched_room_capacity) if searched_room_capacity else 0
+        searched_is_projector_available = request.GET.get("projector_available")
+
+        all_rooms = ConferenceRoomModel.objects.all()
+
+        if searched_is_projector_available:
+            all_rooms = all_rooms.filter(projector_available=searched_is_projector_available)
+        if searched_room_capacity:
+            all_rooms = all_rooms.filter(room_capacity__gte=searched_room_capacity)
+        if searched_room_name:
+            all_rooms = all_rooms.filter(room_name=searched_room_name)
+
+        for room in all_rooms:
+            reservations_dates = [reservation.date for reservation in room.roomreservation_set.all()]
+            room.reserved = str(datetime.date.today()) in reservations_dates
+
+        if len(all_rooms) == 0:
+            return render(request, "searching_results.html", context={"rooms": all_rooms,
+                                                                      "error": "No rooms meeting expectations"})
+
+        return render(request, "searching_results.html", context={"rooms": all_rooms})
 
 
 
